@@ -4,6 +4,7 @@ using ClassRoom.Api.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassRoom.Api.Context.Migrations
 {
     [DbContext(typeof(AppLicationDbContext))]
-    partial class AppLicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230215003632_TaskTables")]
+    partial class TaskTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,33 +202,6 @@ namespace ClassRoom.Api.Context.Migrations
                     b.ToTable("UserCourses");
                 });
 
-            modelBuilder.Entity("ClassRoom.Api.Entities.UserTask", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserTasks");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -358,25 +333,6 @@ namespace ClassRoom.Api.Context.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ClassRoom.Api.Entities.UserTask", b =>
-                {
-                    b.HasOne("ClassRoom.Api.Entities.Task", "Task")
-                        .WithMany("UserTasks")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ClassRoom.Api.Entities.User", "User")
-                        .WithMany("UserTasks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("ClassRoom.Api.Entities.Role", null)
@@ -435,16 +391,9 @@ namespace ClassRoom.Api.Context.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("ClassRoom.Api.Entities.Task", b =>
-                {
-                    b.Navigation("UserTasks");
-                });
-
             modelBuilder.Entity("ClassRoom.Api.Entities.User", b =>
                 {
                     b.Navigation("Courses");
-
-                    b.Navigation("UserTasks");
                 });
 #pragma warning restore 612, 618
         }

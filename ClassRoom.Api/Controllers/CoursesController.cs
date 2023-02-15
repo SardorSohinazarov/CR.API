@@ -14,7 +14,7 @@ namespace ClassRoom.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CoursesController : ControllerBase
+    public partial class CoursesController : ControllerBase
     {
         private readonly AppLicationDbContext _context;
         private readonly UserManager<User> _userManager;
@@ -36,7 +36,7 @@ namespace ClassRoom.Api.Controllers
             return Ok(listofCourseDto);
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetCourseById(Guid id)
         {
             var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == id);
@@ -77,7 +77,7 @@ namespace ClassRoom.Api.Controllers
             return Ok(course?.ToDto());
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCourse(Guid id,[FromBody] UpdateCourseDto updateCourseDto)
         {
             if (!await _context.Courses.AnyAsync(c => c.Id == id))
@@ -85,8 +85,6 @@ namespace ClassRoom.Api.Controllers
 
             if(!ModelState.IsValid)
                 return BadRequest();
-
-
 
             var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == id);
 
@@ -103,7 +101,7 @@ namespace ClassRoom.Api.Controllers
             return Ok(course.ToDto());
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse(Guid id)
         {
             var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == id);
@@ -114,6 +112,29 @@ namespace ClassRoom.Api.Controllers
             if (course.Users?.Any(uc => uc.UserId == user.Id) != true)
                 return BadRequest();
             _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost("{id}/join")]
+        public async Task<IActionResult> JoinCourse(Guid id, [FromBody] JoinCourseDto joinCourseDto)
+        {
+            var course = await _context.Courses.FirstOrDefaultAsync( c => c.Id == id );
+            if (course is null)
+                return NotFound();
+
+            var user = await _userManager.GetUserAsync(User);
+            if (course.Users?.Any(uc => uc.UserId == user.Id) == true)
+                return BadRequest();
+
+            course.Users.Add(new UserCourse
+            {
+                UserId = user.Id,
+                CourseId = course.Id,
+                IsAdmin = false
+            });
+
             await _context.SaveChangesAsync();
 
             return Ok();

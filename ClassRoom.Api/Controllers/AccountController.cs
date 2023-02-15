@@ -68,7 +68,7 @@ namespace ClassRoom.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("username")]
+        [HttpGet("{username}")]
         [Authorize]
         public async Task<IActionResult> Profile(string username)
         {

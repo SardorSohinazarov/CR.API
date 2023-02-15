@@ -10,4 +10,6 @@ public class AppLicationDbContext:IdentityDbContext<User,Role,Guid>
 		:base(options){	}
 	public DbSet<Course> Courses { get; set; }
 	public DbSet<UserCourse> UserCourses { get; set; }
+	public DbSet<Entities.Task> Tasks { get; set; }
+	public DbSet<UserTask> UserTasks { get; set; }
 }

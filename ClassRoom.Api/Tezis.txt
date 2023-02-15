@@ -1,0 +1,18 @@
+﻿1.CreateSchool
+  JoinClass
+    Enter Code of Class
+      List of tasks
+      Add-Task(Teacher)
+  CreateClass
+    Enter about class
+      List of Tasks
+  List of classes
+2.JoinSchool
+  JoinClass
+    Enter Code of Class
+      List of tasks
+      Add-Task(Teacher)
+  CreateClass
+    Enter about class
+      List of Tasks
+  List of classes
